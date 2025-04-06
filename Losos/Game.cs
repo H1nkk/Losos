@@ -11,26 +11,39 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
+using StbImageSharp;
+
+
 namespace ConsoleApp1
 {
     internal class Game : GameWindow
     {
         int width, height;
 
-        float[] vertices = {
-        -0.5f, 0.5f, 0f, // top left vertex - 0
-        0.5f, 0.5f, 0f, // top right vertex - 1
-        0.5f, -0.5f, 0f, // bottom right vertex - 2
-        -0.5f, -0.5f, 0f // bottom left vertex - 3
+        float[] vertices = 
+        {
+            -0.5f, 0.5f, 0f, // top left vertex - 0
+            0.5f, 0.5f, 0f, // top right vertex - 1
+            0.5f, -0.5f, 0f, // bottom right vertex - 2
+            -0.5f, -0.5f, 0f // bottom left vertex - 3
+        };
+        float[] texCoords =
+        {
+                0f, 1f,
+                1f, 1f,
+                1f, 0f,
+                0f, 0f
         };
         uint[] indices =
         {
-        0, 1, 2, //top triangle
-        2, 3, 0 //bottom triangle
+            0, 1, 2, //top triangle
+            2, 3, 0 //bottom triangle
         };
         int VAO;
         int VBO;
         int EBO;
+        int textureVBO;
+        int textureID;
 
         Shader shader;
 
@@ -44,6 +57,31 @@ namespace ConsoleApp1
 
         protected override void OnLoad()
         {
+
+            textureID = GL.GenTexture();
+
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, textureID);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Nearest);
+
+            StbImage.stbi_set_flip_vertically_on_load(1);
+
+            string texturePath = "../../../Textures/unrealSF.png";
+            if (!File.Exists(texturePath))
+                throw new FileNotFoundException("Текстура не найдена!");
+
+            ImageResult boxTexture = ImageResult.FromStream(File.OpenRead(texturePath), ColorComponents.RedGreenBlueAlpha);
+            if (boxTexture.Data == null)
+                throw new Exception("Текстура не загружена или повреждена!");
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, boxTexture.Width, boxTexture.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, boxTexture.Data);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
             //Create VAO 
             VAO = GL.GenVertexArray();
             //Create VBO 
@@ -61,26 +99,33 @@ namespace ConsoleApp1
             GL.EnableVertexArrayAttrib(VAO, 0);
             //Unbind the VBO 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
 
             EBO = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length *
-            sizeof(uint), indices, BufferUsageHint.StaticDraw);
+
+            textureVBO = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, textureVBO);
+            GL.BufferData(BufferTarget.ArrayBuffer, texCoords.Length * sizeof(float), texCoords, BufferUsageHint.StaticDraw);
+
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+            GL.EnableVertexArrayAttrib(VAO, 1);
+
+            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
             shader.LoadShader();
-
-            //GL.DeleteProgram(shaderProgram);
 
             base.OnLoad();
         }
 
         protected override void OnUnload()
         {
-            GL.DeleteBuffer(VAO);
+            GL.DeleteVertexArray(VAO);
             GL.DeleteBuffer(VBO);
             GL.DeleteBuffer(EBO);
+            // GL.DeleteBuffer(textureVBO); // моё нововведение 
+            GL.DeleteTexture(textureID);
             shader.DeleteShader();
             base.OnUnload();
         }
@@ -89,12 +134,14 @@ namespace ConsoleApp1
         {
             GL.ClearColor(0.1f, 0.1f, 0.1f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.BindTexture(TextureTarget.Texture2D, textureID);
+
             shader.UseShader();
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
-            GL.DrawElements(PrimitiveType.Triangles, indices.Length,
-            DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
 
+            Console.WriteLine(string.Join(", ", texCoords)); // debug thing
             Context.SwapBuffers();
 
             base.OnRenderFrame(args);

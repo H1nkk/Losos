@@ -40,13 +40,19 @@ namespace ConsoleApp1
                 string infoLog = GL.GetShaderInfoLog(vertexShader);
                 Console.WriteLine(infoLog);
             }
-            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out
-            int success2);
+            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out int success2);
             if (success2 == 0)
             {
                 string infoLog = GL.GetShaderInfoLog(fragmentShader);
                 Console.WriteLine(infoLog);
             }
+            GL.GetProgram(shaderHandle, GetProgramParameterName.LinkStatus, out int success3);
+            if (success3 == 0)
+            {
+                string infoLog = GL.GetProgramInfoLog(shaderHandle);
+                Console.WriteLine("Shader program linking error:\n" + infoLog);
+            }
+
         }
 
         public static string LoadShaderSource(string filepath)

@@ -1,1 +1,1 @@
-#*Losos na nerest*
+# Losos na nerest

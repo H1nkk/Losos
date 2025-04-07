@@ -15,7 +15,7 @@ namespace ConsoleApp1
 {
     internal class Shader
     {
-        int shaderHandle;
+        public int shaderHandle;
 
         public Shader()
         {

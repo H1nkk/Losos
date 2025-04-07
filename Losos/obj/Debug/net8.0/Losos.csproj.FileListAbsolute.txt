@@ -62,3 +62,5 @@ D:\Programming\c#\lab2\LososNaNerest\Losos\obj\Debug\net8.0\Losos.pdb
 D:\Programming\c#\lab2\LososNaNerest\Losos\obj\Debug\net8.0\Losos.genruntimeconfig.cache
 D:\Programming\c#\lab2\LososNaNerest\Losos\obj\Debug\net8.0\ref\Losos.dll
 D:\Programming\c#\lab2\LososNaNerest\Losos\bin\Debug\net8.0\StbImageSharp.dll
+D:\losos\LososNaNerest\Losos\bin\Debug\net8.0\StbImageSharp.dll
+D:\losos\LososNaNerest\Losos\obj\Debug\net8.0\Losos.sourcelink.json

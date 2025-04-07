@@ -19,26 +19,40 @@ namespace ConsoleApp1
     internal class Game : GameWindow
     {
         int width, height;
+        float yRot = 0.1f;
 
-        float[] vertices = 
+        List<Vector2> texCoords = new List<Vector2>() // мб indices
         {
-            -0.5f, 0.5f, 0f, // top left vertex - 0
-            0.5f, 0.5f, 0f, // top right vertex - 1
-            0.5f, -0.5f, 0f, // bottom right vertex - 2
-            -0.5f, -0.5f, 0f // bottom left vertex - 3
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
         };
-        float[] texCoords =
+
+
+/*        float[] texCoords =
         {
                 0f, 1f,
                 1f, 1f,
                 1f, 0f,
                 0f, 0f
         };
+*/
         uint[] indices =
         {
             0, 1, 2, //top triangle
             2, 3, 0 //bottom triangle
         };
+
+        List<Vector3> vertices = new List<Vector3>()
+        {
+            //front face
+            new Vector3(-0.5f, 0.5f, 0.5f), //top-left vertice
+            new Vector3( 0.5f, 0.5f, 0.5f), //top-right vertice
+            new Vector3( 0.5f, -0.5f, 0.5f), //bottom-right vertice
+            new Vector3(-0.5f, -0.5f, 0.5f), //bottom-left vertice
+        };
+
         int VAO;
         int VBO;
         int EBO;
@@ -136,12 +150,33 @@ namespace ConsoleApp1
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.BindTexture(TextureTarget.Texture2D, textureID);
 
+            //Transformation
+            Matrix4 model = Matrix4.CreateRotationY(yRot);
+            yRot += 0.01f;
+
+            Matrix4 view = Matrix4.Identity;
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), width / height, 0.1f, 100.0f);
+
+            Matrix4 translation = Matrix4.CreateTranslation(0f, 0f, -1f);
+            model *= translation;
+
+            int modelLocation =
+            GL.GetUniformLocation(shader.shaderHandle, "model");
+            int viewLocation =
+            GL.GetUniformLocation(shader.shaderHandle, "view");
+            int projectionLocation =
+            GL.GetUniformLocation(shader.shaderHandle, "projection");
+
             shader.UseShader();
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
             GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
 
-            Console.WriteLine(string.Join(", ", texCoords)); // debug thing
+
+            GL.UniformMatrix4(modelLocation, true, ref model);
+            GL.UniformMatrix4(viewLocation, true, ref view);
+            GL.UniformMatrix4(projectionLocation, true, ref projection);
+
             Context.SwapBuffers();
 
             base.OnRenderFrame(args);

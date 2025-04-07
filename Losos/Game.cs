@@ -20,6 +20,9 @@ namespace ConsoleApp1
     {
         int width, height;
         float yRot = 0.1f;
+        float yHov= 0f;
+        float dy = 0f;
+        float numb = 0.002f;
 
         List<Vector2> texCoords = new List<Vector2>() // мб indices
         {
@@ -27,21 +30,69 @@ namespace ConsoleApp1
             new Vector2(1f, 1f),
             new Vector2(1f, 0f),
             new Vector2(0f, 0f),
+
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
+
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
+
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
+
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
+
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
+
+
         };
 
 
-/*        float[] texCoords =
-        {
-                0f, 1f,
-                1f, 1f,
-                1f, 0f,
-                0f, 0f
-        };
-*/
+        /*        float[] texCoords =
+                {
+                        0f, 1f,
+                        1f, 1f,
+                        1f, 0f,
+                        0f, 0f
+                };
+        */
         uint[] indices =
         {
-            0, 1, 2, //top triangle
-            2, 3, 0 //bottom triangle
+            // Передняя грань
+            0, 1, 2,
+            2, 3, 0,
+    
+            // Правая грань
+            4, 5, 6,
+            6, 7, 4,
+    
+            // Задняя грань
+            8, 9, 10,
+            10, 11, 8,
+    
+            // Левая грань
+            12, 13, 14,
+            14, 15, 12,
+    
+            // Верхняя грань
+            16, 17, 18,
+            18, 19, 16,
+    
+            // Нижняя грань
+            20, 21, 22,
+            22, 23, 20
         };
 
         List<Vector3> vertices = new List<Vector3>()
@@ -51,6 +102,36 @@ namespace ConsoleApp1
             new Vector3( 0.5f, 0.5f, 0.5f), //top-right vertice
             new Vector3( 0.5f, -0.5f, 0.5f), //bottom-right vertice
             new Vector3(-0.5f, -0.5f, 0.5f), //bottom-left vertice
+
+            // Правая грань (Right)
+            new Vector3( 0.5f,  0.5f,  0.5f), // top-left
+            new Vector3( 0.5f,  0.5f, -0.5f), // top-right
+            new Vector3( 0.5f, -0.5f, -0.5f), // bottom-right
+            new Vector3( 0.5f, -0.5f,  0.5f), // bottom-left 
+
+            // Задняя грань (Back)
+            new Vector3( 0.5f,  0.5f, -0.5f), // top-left
+            new Vector3(-0.5f,  0.5f, -0.5f), // top-right
+            new Vector3(-0.5f, -0.5f, -0.5f), // bottom-right
+            new Vector3( 0.5f, -0.5f, -0.5f), // bottom-left
+
+            // Левая грань (Left)
+            new Vector3(-0.5f,  0.5f, -0.5f), // top-left
+            new Vector3(-0.5f,  0.5f,  0.5f), // top-right
+            new Vector3(-0.5f, -0.5f,  0.5f), // bottom-right
+            new Vector3(-0.5f, -0.5f, -0.5f), // bottom-left
+
+            // Верхняя грань (Top)
+            new Vector3(-0.5f,  0.5f, -0.5f), // top-left
+            new Vector3( 0.5f,  0.5f, -0.5f), // top-right
+            new Vector3( 0.5f,  0.5f,  0.5f), // bottom-right
+            new Vector3(-0.5f,  0.5f,  0.5f), // bottom-left
+
+            // Нижняя грань (Bottom)
+            new Vector3(-0.5f, -0.5f,  0.5f), // top-left
+            new Vector3( 0.5f, -0.5f,  0.5f), // top-right
+            new Vector3( 0.5f, -0.5f, -0.5f), // bottom-right
+            new Vector3(-0.5f, -0.5f, -0.5f)  // bottom-left
         };
 
         int VAO;
@@ -58,8 +139,10 @@ namespace ConsoleApp1
         int EBO;
         int textureVBO;
         int textureID;
+        int i = 0;
 
         Shader shader;
+        Camera camera;
 
         public Game(int width, int height) : base(GameWindowSettings.Default, NativeWindowSettings.Default)
         {
@@ -103,8 +186,7 @@ namespace ConsoleApp1
             //Bind the VBO
             GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
             //Copy vertices data to the buffer 
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length *
-            sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Count * Vector3.SizeInBytes * sizeof(float), vertices.ToArray(), BufferUsageHint.StaticDraw);
             //Bind the VAO 
             GL.BindVertexArray(VAO);
             //Bind a slot number 0 
@@ -119,7 +201,7 @@ namespace ConsoleApp1
 
             textureVBO = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, textureVBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, texCoords.Length * sizeof(float), texCoords, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, texCoords.Count * Vector3.SizeInBytes * sizeof(float), texCoords.ToArray(), BufferUsageHint.StaticDraw);
 
             GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
 
@@ -130,7 +212,11 @@ namespace ConsoleApp1
 
             shader.LoadShader();
 
+            GL.Enable(EnableCap.DepthTest);
+
             base.OnLoad();
+            camera = new Camera(width, height, Vector3.Zero);
+            CursorState = CursorState.Grabbed;
         }
 
         protected override void OnUnload()
@@ -138,7 +224,7 @@ namespace ConsoleApp1
             GL.DeleteVertexArray(VAO);
             GL.DeleteBuffer(VBO);
             GL.DeleteBuffer(EBO);
-            // GL.DeleteBuffer(textureVBO); // моё нововведение 
+            GL.DeleteBuffer(textureVBO); // моё нововведение 
             GL.DeleteTexture(textureID);
             shader.DeleteShader();
             base.OnUnload();
@@ -147,25 +233,33 @@ namespace ConsoleApp1
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             GL.ClearColor(0.1f, 0.1f, 0.1f, 1f);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.BindTexture(TextureTarget.Texture2D, textureID);
 
             //Transformation
-            Matrix4 model = Matrix4.CreateRotationY(yRot);
-            yRot += 0.01f;
+            Matrix4 model = Matrix4.CreateRotationY(yRot) * Matrix4.CreateRotationX(yRot / 10f) * Matrix4.CreateTranslation(0f, (float)(yHov),0f);
+            yRot += 0.000005f;
+            if (i % 10 == 0)
+            {
+                float dist = 0.002f;
+                yHov += dy;
+                dy = numb - dist;
+                numb += 0.00001f;
+                if (numb > dist * 2) numb = 0f;
+                i = 0;
+            }
+            i++;
 
-            Matrix4 view = Matrix4.Identity;
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), width / height, 0.1f, 100.0f);
+            Matrix4 view = camera.GetViewMatrix();
+            Matrix4 projection = camera.GetProjection();
 
-            Matrix4 translation = Matrix4.CreateTranslation(0f, 0f, -1f);
+            Matrix4 translation = Matrix4.Identity;
+//            Matrix4 translation = Matrix4.CreateTranslation(0f, 0f, -1f);
             model *= translation;
 
-            int modelLocation =
-            GL.GetUniformLocation(shader.shaderHandle, "model");
-            int viewLocation =
-            GL.GetUniformLocation(shader.shaderHandle, "view");
-            int projectionLocation =
-            GL.GetUniformLocation(shader.shaderHandle, "projection");
+            int modelLocation = GL.GetUniformLocation(shader.shaderHandle, "model");
+            int viewLocation = GL.GetUniformLocation(shader.shaderHandle, "view");
+            int projectionLocation = GL.GetUniformLocation(shader.shaderHandle, "projection");
 
             shader.UseShader();
             GL.BindVertexArray(VAO);
@@ -188,6 +282,10 @@ namespace ConsoleApp1
             {
                 Close();
             }
+            MouseState mouse = MouseState;
+            KeyboardState input = KeyboardState;
+            base.OnUpdateFrame(args);
+            camera.Update(input, mouse, args);
             base.OnUpdateFrame(args);
         }
 

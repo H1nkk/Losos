@@ -19,16 +19,25 @@ namespace ConsoleApp1
         Vector3 up = Vector3.UnitY;
         Vector3 front = -Vector3.UnitZ;
         Vector3 right = Vector3.UnitX;
-        private float pitch;
-        private float yaw = -90.0f;
+        public float pitch = 0f; // вернуть private
+        public float yaw = 270f;// вернуть private
         private bool firstMove = true;
         public Vector2 lastPos;
 
-        public Camera(int width, int height, Vector3 position)
+        public Camera(int width, int height, Vector3 position, Vector3 target)
         {
             SCREENWIDTH = width;
             SCREENHEIGHT = height;
             this.position = position;
+            /*
+
+            front = Vector3.Normalize(target - position);
+            
+            yaw = MathHelper.RadiansToDegrees(MathF.Atan2(front.Z, front.X));
+            pitch = MathHelper.RadiansToDegrees(MathF.Asin(front.Y));
+
+            UpdateVectors();*/
+            lastPos = Vector2.Zero;
         }
 
         public Matrix4 GetViewMatrix()
@@ -66,9 +75,14 @@ namespace ConsoleApp1
             {
                 position -= up * SPEED * (float)e.Time;
             }
+            if (input.IsKeyDown(Keys.R))
+            {
+                pitch = 0f;
+                yaw = 270f;
+            }
             if (firstMove)
             {
-                lastPos = new Vector2(position.X, position.Y);
+                lastPos = new Vector2(mouse.X, mouse.Y);
                 firstMove = false;
             }
             else

@@ -215,7 +215,7 @@ namespace ConsoleApp1
             GL.Enable(EnableCap.DepthTest);
 
             base.OnLoad();
-            camera = new Camera(width, height, Vector3.Zero);
+            camera = new Camera(width, height, new Vector3(0,0,5), Vector3.Zero);
             CursorState = CursorState.Grabbed;
         }
 
@@ -232,7 +232,7 @@ namespace ConsoleApp1
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            GL.ClearColor(0.1f, 0.1f, 0.1f, 1f);
+            GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.BindTexture(TextureTarget.Texture2D, textureID);
 
@@ -253,23 +253,19 @@ namespace ConsoleApp1
             Matrix4 view = camera.GetViewMatrix();
             Matrix4 projection = camera.GetProjection();
 
-            Matrix4 translation = Matrix4.Identity;
-//            Matrix4 translation = Matrix4.CreateTranslation(0f, 0f, -1f);
+            Matrix4 translation = Matrix4.CreateTranslation(-1.5f, 0f, 0f); // перенос начальной точки камеры
             model *= translation;
 
-            int modelLocation = GL.GetUniformLocation(shader.shaderHandle, "model");
-            int viewLocation = GL.GetUniformLocation(shader.shaderHandle, "view");
-            int projectionLocation = GL.GetUniformLocation(shader.shaderHandle, "projection");
-
             shader.UseShader();
+
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
             GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
+            GL.BindVertexArray(0);
 
-
-            GL.UniformMatrix4(modelLocation, true, ref model);
-            GL.UniformMatrix4(viewLocation, true, ref view);
-            GL.UniformMatrix4(projectionLocation, true, ref projection);
+            shader.SetMatrix4("model", model);
+            shader.SetMatrix4("view", view);
+            shader.SetMatrix4("projection", projection);
 
             Context.SwapBuffers();
 
@@ -287,6 +283,11 @@ namespace ConsoleApp1
             base.OnUpdateFrame(args);
             camera.Update(input, mouse, args);
             base.OnUpdateFrame(args);
+
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine($"Pitch: {camera.pitch:F2}    ");
+            Console.WriteLine($"Yaw: {camera.yaw:F2}    ");
+            Console.WriteLine($"X, Y, Z: {camera.position.X:F2}, {camera.position.Y:F2}, {camera.position.Z:F2}    ");
         }
 
         protected override void OnResize(ResizeEventArgs e)

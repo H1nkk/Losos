@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programming\\c#\\lab2\\LososNaNerest\\Losos\\Losos.csproj": {}
+    "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Losos.csproj": {}
   },
   "projects": {
-    "D:\\Programming\\c#\\lab2\\LososNaNerest\\Losos\\Losos.csproj": {
+    "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Losos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programming\\c#\\lab2\\LososNaNerest\\Losos\\Losos.csproj",
+        "projectUniqueName": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Losos.csproj",
         "projectName": "Losos",
-        "projectPath": "D:\\Programming\\c#\\lab2\\LososNaNerest\\Losos\\Losos.csproj",
+        "projectPath": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Losos.csproj",
         "packagesPath": "C:\\Users\\the_h\\.nuget\\packages\\",
-        "outputPath": "D:\\Programming\\c#\\lab2\\LososNaNerest\\Losos\\obj\\",
+        "outputPath": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -51,9 +51,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "ImGui.NET": {
+              "target": "Package",
+              "version": "[1.91.6.1, )"
+            },
             "OpenTK": {
               "target": "Package",
               "version": "[4.8.2, )"
+            },
+            "Silk.NET.OpenGL.Extensions.ImGui": {
+              "target": "Package",
+              "version": "[2.22.0, )"
             },
             "StbImageSharp": {
               "target": "Package",

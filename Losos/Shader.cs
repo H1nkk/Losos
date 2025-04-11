@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using OpenTK.Audio.OpenAL;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace ConsoleApp1
 {
     internal class Shader
     {
         public int shaderHandle;
+
 
         public Shader()
         {
@@ -52,7 +43,18 @@ namespace ConsoleApp1
                 string infoLog = GL.GetProgramInfoLog(shaderHandle);
                 Console.WriteLine("Shader program linking error:\n" + infoLog);
             }
+        }
 
+        public void SetMatrix4(string name, Matrix4 matrix)
+        {
+            int location = GL.GetUniformLocation(shaderHandle, name);
+            GL.UniformMatrix4(location, true, ref matrix);
+        }
+
+        public void SetVector3(string name, Vector3 vector)
+        {
+            int location = GL.GetUniformLocation(shaderHandle, name);
+            GL.Uniform3(location, vector);
         }
 
         public static string LoadShaderSource(string filepath)

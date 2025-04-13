@@ -15,3 +15,7 @@ SPACE - move up
 LEFT SHIFT - move down
 
 ESCAPE - close the window
+
+R - set camera position to default
+
+SHIFT + R - reset moving speed

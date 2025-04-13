@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Losos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04ac4af75a5d34a0ec1bf5cd11e8533ca616a653")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+205d2146e3496075ee28259f418947aaedb62587")]
 [assembly: System.Reflection.AssemblyProductAttribute("Losos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Losos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace Losos
 {
     internal class Camera
     {
@@ -19,16 +19,20 @@ namespace ConsoleApp1
         Vector3 up = Vector3.UnitY;
         Vector3 front = -Vector3.UnitZ;
         Vector3 right = Vector3.UnitX;
-        public float pitch = 0f; // вернуть private
-        public float yaw = 270f;// вернуть private
-        private bool firstMove = true;
+        public float pitch; // вернуть private
+        public float yaw;// вернуть private
+        private int firstTenMoves = 0;
         public Vector2 lastPos;
+        Vector3 defaultPosition;
 
-        public Camera(int width, int height, Vector3 position, Vector3 target)
+        public Camera(int width, int height, Vector3 position, Vector3 target, float pitch = -45f, float yaw = 270f)
         {
             SCREENWIDTH = width;
             SCREENHEIGHT = height;
             this.position = position;
+            defaultPosition = position;
+            this.pitch = pitch;
+            this.yaw = yaw;
             /*
 
             front = Vector3.Normalize(target - position);
@@ -75,15 +79,18 @@ namespace ConsoleApp1
             {
                 position -= up * SPEED * (float)e.Time;
             }
-            if (input.IsKeyDown(Keys.R))
+            if (input.IsKeyDown(Keys.R) && !input.IsKeyDown(Keys.LeftShift))
             {
-                pitch = 0f;
+                pitch = -45f;
                 yaw = 270f;
+                position = defaultPosition;
             }
-            if (firstMove)
+            if (firstTenMoves < 10)
             {
                 lastPos = new Vector2(mouse.X, mouse.Y);
-                firstMove = false;
+                firstTenMoves++;
+                this.pitch = -45f;
+                this.yaw = 270f;
             }
             else
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Losos;
 using OpenTK.Audio.OpenAL;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
@@ -14,15 +14,11 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using StbImageSharp;
 
 
-namespace ConsoleApp1
+namespace Losos
 {
     internal class Game : GameWindow
     {
         int width, height;
-        float yRot = 0.1f;
-        float yHov= 0f;
-        float dy = 0f;
-        float numb = 0.002f;
 
         List<Vector2> texCoords = new List<Vector2>() // мб indices
         {
@@ -58,16 +54,33 @@ namespace ConsoleApp1
 
 
         };
+        List<Vector2> fishTexCoords = new List<Vector2>()
+        {
+            new Vector2(0.5f, 0.5f), // 0
+            new Vector2(0.7f, 0.6f), // 1
+            new Vector2(1.0f, 0.5f), // 2
+            new Vector2(0.7f, 0.4f), // 3
 
+            new Vector2(0.5f, 0.5f), // 4
+            new Vector2(0.7f, 0.6f), // 5
+            new Vector2(1.0f, 0.5f), // 6
+            new Vector2(0.7f, 0.4f), // 7
 
-        /*        float[] texCoords =
-                {
-                        0f, 1f,
-                        1f, 1f,
-                        1f, 0f,
-                        0f, 0f
-                };
-        */
+            new Vector2(1.1f, 0.6f), // 8
+            new Vector2(1.2f, 0.5f), // 9
+            new Vector2(1.1f, 0.4f), // 10
+
+            new Vector2(0.6f, 0.8f), // 11
+            new Vector2(0.6f, 0.2f)  // 12
+        };
+        List<Vector2> bgTexCoords = new List<Vector2>() // мб indices
+        {
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f),
+        };
+
         uint[] indices =
         {
             // Передняя грань
@@ -93,6 +106,47 @@ namespace ConsoleApp1
             // Нижняя грань
             20, 21, 22,
             22, 23, 20
+        };
+        uint[] fishIndices = new uint[]
+        {
+    // Тело (левая и правая стороны)
+    0, 1, 2,    0, 2, 3,
+    4, 6, 5,    4, 7, 6,
+
+    // Грани тела
+    0, 1, 5,    0, 5, 4,
+    1, 2, 6,    1, 6, 5,
+    2, 3, 7,    2, 7, 6,
+    3, 0, 4,    3, 4, 7,
+
+    // Хвост
+    2, 8, 9,    2, 9, 10,    // левая сторона
+    6, 12, 11,  6, 13, 12,   // правая сторона
+
+    // Грани хвоста
+    8, 11, 12,  8, 12, 9,
+    9, 12, 13,  9, 13, 10,
+    10, 13, 11, 10, 11, 8,
+
+    // Верхний плавник
+    1, 14, 15,  // левая сторона
+    5, 17, 16,  // правая сторона
+
+    // Грани верхнего плавника
+    14, 16, 17, 14, 17, 15,
+
+    // Нижний плавник
+    3, 19, 18,  // левая сторона
+    7, 20, 21,  // правая сторона
+
+    // Грани нижнего плавника
+    18, 20, 21, 18, 21, 19
+        };
+        uint[] bgIndices = new uint[]
+        {
+            // Передняя грань
+            0, 1, 2,
+            2, 3, 0,
         };
 
         List<Vector3> vertices = new List<Vector3>()
@@ -133,16 +187,103 @@ namespace ConsoleApp1
             new Vector3( 0.5f, -0.5f, -0.5f), // bottom-right
             new Vector3(-0.5f, -0.5f, -0.5f)  // bottom-left
         };
+        List<Vector3> fishVertices = new List<Vector3>()
+{
+    // Тело (левая сторона)
+    new Vector3(0.0f,  0.0f, -0.1f), // 0
+    new Vector3(0.5f,  0.2f, -0.1f), // 1
+    new Vector3(1.0f,  0.0f, -0.1f), // 2
+    new Vector3(0.5f, -0.2f, -0.1f), // 3
 
-        int VAO;
-        int VBO;
-        int EBO;
-        int textureVBO;
-        int textureID;
-        int i = 0;
+    // Тело (правая сторона)
+    new Vector3(0.0f,  0.0f,  0.1f), // 4
+    new Vector3(0.5f,  0.2f,  0.1f), // 5
+    new Vector3(1.0f,  0.0f,  0.1f), // 6
+    new Vector3(0.5f, -0.2f,  0.1f), // 7
+
+    // Хвост (левая сторона)
+    new Vector3(1.2f,  0.3f, -0.05f), // 8
+    new Vector3(1.4f,  0.0f, -0.05f), // 9
+    new Vector3(1.2f, -0.3f, -0.05f), // 10
+
+    // Хвост (правая сторона)
+    new Vector3(1.2f,  0.3f,  0.05f), // 11
+    new Vector3(1.4f,  0.0f,  0.05f), // 12
+    new Vector3(1.2f, -0.3f,  0.05f), // 13
+
+    // Верхний плавник (левая сторона)
+    new Vector3(0.3f,  0.4f, -0.05f), // 14
+    new Vector3(0.5f,  0.3f, -0.05f), // 15
+
+    // Верхний плавник (правая сторона)
+    new Vector3(0.3f,  0.4f,  0.05f), // 16
+    new Vector3(0.5f,  0.3f,  0.05f), // 17
+
+    // Нижний плавник (левая сторона)
+    new Vector3(0.3f, -0.4f, -0.05f), // 18
+    new Vector3(0.5f, -0.3f, -0.05f), // 19
+
+    // Нижний плавник (правая сторона)
+    new Vector3(0.3f, -0.4f,  0.05f), // 20
+    new Vector3(0.5f, -0.3f,  0.05f), // 21
+};
+        List<Vector3> floorVertices = new List<Vector3>()
+        {
+            // front face (передняя грань)
+            new Vector3(-8.0f,  1.0f,  16.0f), // top-left
+            new Vector3( 8.0f,  1.0f,  16.0f), // top-right
+            new Vector3( 8.0f, -1.0f,  16.0f), // bottom-right
+            new Vector3(-8.0f, -1.0f,  16.0f), // bottom-left
+
+            // right face (правая грань)
+            new Vector3( 8.0f,  1.0f,  16.0f), // front-top
+            new Vector3( 8.0f,  1.0f, -16.0f), // back-top
+            new Vector3( 8.0f, -1.0f, -16.0f), // back-bottom
+            new Vector3( 8.0f, -1.0f,  16.0f), // front-bottom
+
+            // back face (задняя грань)
+            new Vector3( 8.0f,  1.0f, -16.0f), // top-right
+            new Vector3(-8.0f,  1.0f, -16.0f), // top-left
+            new Vector3(-8.0f, -1.0f, -16.0f), // bottom-left
+            new Vector3( 8.0f, -1.0f, -16.0f), // bottom-right
+
+            // left face (левая грань)
+            new Vector3(-8.0f,  1.0f, -16.0f), // back-top
+            new Vector3(-8.0f,  1.0f,  16.0f), // front-top
+            new Vector3(-8.0f, -1.0f,  16.0f), // front-bottom
+            new Vector3(-8.0f, -1.0f, -16.0f), // back-bottom
+
+            // top face (верхняя грань)
+            new Vector3(-8.0f,  1.0f, -16.0f), // back-left
+            new Vector3( 8.0f,  1.0f, -16.0f), // back-right
+            new Vector3( 8.0f,  1.0f,  16.0f), // front-right
+            new Vector3(-8.0f,  1.0f,  16.0f), // front-left
+
+            // bottom face (нижняя грань)
+            new Vector3(-8.0f, -1.0f,  16.0f), // front-left
+            new Vector3( 8.0f, -1.0f,  16.0f), // front-right
+            new Vector3( 8.0f, -1.0f, -16.0f), // back-right
+            new Vector3(-8.0f, -1.0f, -16.0f)  // back-left
+        };
+        List<Vector3> bgVertices = new List<Vector3>() {             
+            // Нижняя грань (Bottom)
+            new Vector3(-0.5f, 0,  0.5f), // top-left
+            new Vector3( 0.5f, 0,  0.5f), // top-right
+            new Vector3( 0.5f, 0, -0.5f), // bottom-right
+            new Vector3(-0.5f, 0, -0.5f)  // bottom-left
+        };
 
         Shader shader;
         Camera camera;
+
+        Mesh fish1;
+        Mesh bg;
+        Coin cube1;
+        Floor floor1;
+        Floor floor2;
+
+        float gameSpeed = 10f;
+        float dGameSpeed = 0.001f;
 
         public Game(int width, int height) : base(GameWindowSettings.Default, NativeWindowSettings.Default)
         {
@@ -154,78 +295,33 @@ namespace ConsoleApp1
 
         protected override void OnLoad()
         {
-
-            textureID = GL.GenTexture();
-
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, textureID);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Nearest);
-
-            StbImage.stbi_set_flip_vertically_on_load(1);
-
-            string texturePath = "../../../Textures/unrealSF.png";
-            if (!File.Exists(texturePath))
-                throw new FileNotFoundException("Текстура не найдена!");
-
-            ImageResult boxTexture = ImageResult.FromStream(File.OpenRead(texturePath), ColorComponents.RedGreenBlueAlpha);
-            if (boxTexture.Data == null)
-                throw new Exception("Текстура не загружена или повреждена!");
-
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, boxTexture.Width, boxTexture.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, boxTexture.Data);
-
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-
-            //Create VAO 
-            VAO = GL.GenVertexArray();
-            //Create VBO 
-            VBO = GL.GenBuffer();
-            //Bind the VBO
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-            //Copy vertices data to the buffer 
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Count * Vector3.SizeInBytes * sizeof(float), vertices.ToArray(), BufferUsageHint.StaticDraw);
-            //Bind the VAO 
-            GL.BindVertexArray(VAO);
-            //Bind a slot number 0 
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
-            //Enable the slot
-            GL.EnableVertexArrayAttrib(VAO, 0);
-            //Unbind the VBO 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-            EBO = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
-
-            textureVBO = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, textureVBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, texCoords.Count * Vector3.SizeInBytes * sizeof(float), texCoords.ToArray(), BufferUsageHint.StaticDraw);
-
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.EnableVertexArrayAttrib(VAO, 1);
-
-            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            string texturePath1 = "../../../Textures/fishyfishy.png";
+            string texturePath2 = "../../../Textures/unrealSF.png";
+            string floorPath1 = "../../../Textures/sand.png";
+            string floorPath2 = "../../../Textures/mirroredSand.png";
+            string texturePath4 = "../../../Textures/bluebg.png";
 
             shader.LoadShader();
+
+            cube1 = new Coin(texturePath2, vertices, indices, texCoords, shader, new Vector3(0, 0, 0));
+            fish1 = new Coin(texturePath1, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(1.5f, 0, 0));
+            floor1 = new Floor(floorPath1, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, -32), 1.0f);
+            floor2 = new Floor(floorPath2, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, 0), 1.0f);
+            bg = new Mesh(texturePath4, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 50f);
 
             GL.Enable(EnableCap.DepthTest);
 
             base.OnLoad();
-            camera = new Camera(width, height, new Vector3(0,0,5), Vector3.Zero);
+            camera = new Camera(width, height, new Vector3(0,1.5f,3), Vector3.Zero);
             CursorState = CursorState.Grabbed;
         }
 
         protected override void OnUnload()
         {
-            GL.DeleteVertexArray(VAO);
-            GL.DeleteBuffer(VBO);
-            GL.DeleteBuffer(EBO);
-            GL.DeleteBuffer(textureVBO); // моё нововведение 
-            GL.DeleteTexture(textureID);
+            cube1.Unload();
+            fish1.Unload();
+            floor1.Unload();
+            floor2.Unload();
             shader.DeleteShader();
             base.OnUnload();
         }
@@ -234,36 +330,30 @@ namespace ConsoleApp1
         {
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.BindTexture(TextureTarget.Texture2D, textureID);
 
-            //Transformation
-            Matrix4 model = Matrix4.CreateRotationY(yRot) * Matrix4.CreateRotationX(yRot / 10f) * Matrix4.CreateTranslation(0f, (float)(yHov),0f);
-            yRot += 0.000005f;
-            if (i % 10 == 0)
-            {
-                float dist = 0.002f;
-                yHov += dy;
-                dy = numb - dist;
-                numb += 0.00001f;
-                if (numb > dist * 2) numb = 0f;
-                i = 0;
-            }
-            i++;
+            gameSpeed += dGameSpeed;
+            float realSpeed = (float)MathHelper.Log2(gameSpeed) - 3f;
+            floor1.setSpeed(realSpeed);
+            floor2.setSpeed(realSpeed);
+
+            shader.SetMatrix4("model", cube1.GetModel());
+            cube1.Draw();
+
+            shader.SetMatrix4("model", fish1.GetModel());
+            fish1.Draw();
+
+            shader.SetMatrix4("model", floor1.GetModel());
+            floor1.Draw();            
+            
+            shader.SetMatrix4("model", floor2.GetModel());
+            floor2.Draw();
+            
+            shader.SetMatrix4("model", bg.GetModel());
+            bg.Draw();
 
             Matrix4 view = camera.GetViewMatrix();
             Matrix4 projection = camera.GetProjection();
 
-            Matrix4 translation = Matrix4.CreateTranslation(-1.5f, 0f, 0f); // перенос начальной точки камеры
-            model *= translation;
-
-            shader.UseShader();
-
-            GL.BindVertexArray(VAO);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, EBO);
-            GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
-            GL.BindVertexArray(0);
-
-            shader.SetMatrix4("model", model);
             shader.SetMatrix4("view", view);
             shader.SetMatrix4("projection", projection);
 
@@ -278,6 +368,10 @@ namespace ConsoleApp1
             {
                 Close();
             }
+            if (KeyboardState.IsKeyDown(Keys.R) && KeyboardState.IsKeyDown(Keys.LeftShift))
+            {
+                gameSpeed = 10f;
+            }
             MouseState mouse = MouseState;
             KeyboardState input = KeyboardState;
             base.OnUpdateFrame(args);
@@ -288,6 +382,7 @@ namespace ConsoleApp1
             Console.WriteLine($"Pitch: {camera.pitch:F2}    ");
             Console.WriteLine($"Yaw: {camera.yaw:F2}    ");
             Console.WriteLine($"X, Y, Z: {camera.position.X:F2}, {camera.position.Y:F2}, {camera.position.Z:F2}    ");
+            Console.WriteLine($"Speed: {gameSpeed:F2}, estimated: {(float)MathHelper.Log2(gameSpeed) - 3f:F2} ");
         }
 
         protected override void OnResize(ResizeEventArgs e)

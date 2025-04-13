@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-namespace ConsoleApp1
+namespace Losos
 {
     internal class Shader
     {

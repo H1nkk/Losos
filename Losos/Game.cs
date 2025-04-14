@@ -230,40 +230,40 @@ namespace Losos
         List<Vector3> floorVertices = new List<Vector3>()
         {
             // front face (передняя грань)
-            new Vector3(-8.0f,  1.0f,  16.0f), // top-left
-            new Vector3( 8.0f,  1.0f,  16.0f), // top-right
-            new Vector3( 8.0f, -1.0f,  16.0f), // bottom-right
-            new Vector3(-8.0f, -1.0f,  16.0f), // bottom-left
+            new Vector3(-8.0f,  1.0f,  24.0f), // top-left
+            new Vector3( 8.0f,  1.0f,  24.0f), // top-right
+            new Vector3( 8.0f, -1.0f,  24.0f), // bottom-right
+            new Vector3(-8.0f, -1.0f,  24.0f), // bottom-left
 
             // right face (правая грань)
-            new Vector3( 8.0f,  1.0f,  16.0f), // front-top
-            new Vector3( 8.0f,  1.0f, -16.0f), // back-top
-            new Vector3( 8.0f, -1.0f, -16.0f), // back-bottom
-            new Vector3( 8.0f, -1.0f,  16.0f), // front-bottom
+            new Vector3( 8.0f,  1.0f,  24.0f), // front-top
+            new Vector3( 8.0f,  1.0f, -24.0f), // back-top
+            new Vector3( 8.0f, -1.0f, -24.0f), // back-bottom
+            new Vector3( 8.0f, -1.0f,  24.0f), // front-bottom
 
             // back face (задняя грань)
-            new Vector3( 8.0f,  1.0f, -16.0f), // top-right
-            new Vector3(-8.0f,  1.0f, -16.0f), // top-left
-            new Vector3(-8.0f, -1.0f, -16.0f), // bottom-left
-            new Vector3( 8.0f, -1.0f, -16.0f), // bottom-right
+            new Vector3( 8.0f,  1.0f, -24.0f), // top-right
+            new Vector3(-8.0f,  1.0f, -24.0f), // top-left
+            new Vector3(-8.0f, -1.0f, -24.0f), // bottom-left
+            new Vector3( 8.0f, -1.0f, -24.0f), // bottom-right
 
             // left face (левая грань)
-            new Vector3(-8.0f,  1.0f, -16.0f), // back-top
-            new Vector3(-8.0f,  1.0f,  16.0f), // front-top
-            new Vector3(-8.0f, -1.0f,  16.0f), // front-bottom
-            new Vector3(-8.0f, -1.0f, -16.0f), // back-bottom
+            new Vector3(-8.0f,  1.0f, -24.0f), // back-top
+            new Vector3(-8.0f,  1.0f,  24.0f), // front-top
+            new Vector3(-8.0f, -1.0f,  24.0f), // front-bottom
+            new Vector3(-8.0f, -1.0f, -24.0f), // back-bottom
 
             // top face (верхняя грань)
-            new Vector3(-8.0f,  1.0f, -16.0f), // back-left
-            new Vector3( 8.0f,  1.0f, -16.0f), // back-right
-            new Vector3( 8.0f,  1.0f,  16.0f), // front-right
-            new Vector3(-8.0f,  1.0f,  16.0f), // front-left
+            new Vector3(-8.0f,  1.0f, -24.0f), // back-left
+            new Vector3( 8.0f,  1.0f, -24.0f), // back-right
+            new Vector3( 8.0f,  1.0f,  24.0f), // front-right
+            new Vector3(-8.0f,  1.0f,  24.0f), // front-left
 
             // bottom face (нижняя грань)
-            new Vector3(-8.0f, -1.0f,  16.0f), // front-left
-            new Vector3( 8.0f, -1.0f,  16.0f), // front-right
-            new Vector3( 8.0f, -1.0f, -16.0f), // back-right
-            new Vector3(-8.0f, -1.0f, -16.0f)  // back-left
+            new Vector3(-8.0f, -1.0f,  24.0f), // front-left
+            new Vector3( 8.0f, -1.0f,  24.0f), // front-right
+            new Vector3( 8.0f, -1.0f, -24.0f), // back-right
+            new Vector3(-8.0f, -1.0f, -24.0f)  // back-left
         };
         List<Vector3> bgVertices = new List<Vector3>() {             
             // Нижняя грань (Bottom)
@@ -276,11 +276,13 @@ namespace Losos
         Shader shader;
         Camera camera;
 
-        Mesh fish1;
+        // Mesh fish1;
         Mesh bg;
-        Coin cube1;
+        // Coin cube1;
         Floor floor1;
         Floor floor2;
+        Player player;
+        Obstacle[] obstacles;
 
         float gameSpeed = 10f;
         float dGameSpeed = 0.001f;
@@ -291,23 +293,32 @@ namespace Losos
             this.height = height;
             this.width = width;
             shader = new Shader();
+            obstacles = new Obstacle[3];
         }
 
         protected override void OnLoad()
         {
-            string texturePath1 = "../../../Textures/fishyfishy.png";
+            Random random = new Random();
+
+            string fishPath = "../../../Textures/fishyfishy.png";
             string texturePath2 = "../../../Textures/unrealSF.png";
             string floorPath1 = "../../../Textures/sand.png";
             string floorPath2 = "../../../Textures/mirroredSand.png";
             string texturePath4 = "../../../Textures/bluebg.png";
-
+            string boxPath = "../../../Textures/bigBox.png";
+            
             shader.LoadShader();
 
-            cube1 = new Coin(texturePath2, vertices, indices, texCoords, shader, new Vector3(0, 0, 0));
-            fish1 = new Coin(texturePath1, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(1.5f, 0, 0));
-            floor1 = new Floor(floorPath1, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, -32), 1.0f);
+            //cube1 = new Coin(texturePath2, vertices, indices, texCoords, shader, new Vector3(0, 0, 0));
+            //fish1 = new Coin(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(1.5f, 0, 0));
+            floor1 = new Floor(floorPath1, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, -48), 1.0f);
             floor2 = new Floor(floorPath2, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, 0), 1.0f);
-            bg = new Mesh(texturePath4, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 50f);
+            bg = new Mesh(texturePath4, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 100f);
+            player = new Player(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(0f, -1f, 0.5f), 1f, 5f);
+            obstacles[0] = new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(-2f, 0f, -6f));
+            obstacles[1] = new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(2f, 0f, -10f));
+            obstacles[2] = new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(0.5f, 0f, -20f));
+
 
             GL.Enable(EnableCap.DepthTest);
 
@@ -318,17 +329,18 @@ namespace Losos
 
         protected override void OnUnload()
         {
-            cube1.Unload();
-            fish1.Unload();
+            // cube1.Unload();
+            // fish1.Unload();
             floor1.Unload();
             floor2.Unload();
+            player.Unload();
             shader.DeleteShader();
             base.OnUnload();
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
+            GL.ClearColor(0.2f, 0.6f, 1f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             gameSpeed += dGameSpeed;
@@ -336,11 +348,11 @@ namespace Losos
             floor1.setSpeed(realSpeed);
             floor2.setSpeed(realSpeed);
 
-            shader.SetMatrix4("model", cube1.GetModel());
-            cube1.Draw();
+            // shader.SetMatrix4("model", cube1.GetModel());
+            // cube1.Draw();
 
-            shader.SetMatrix4("model", fish1.GetModel());
-            fish1.Draw();
+            // shader.SetMatrix4("model", fish1.GetModel());
+            // fish1.Draw();
 
             shader.SetMatrix4("model", floor1.GetModel());
             floor1.Draw();            
@@ -350,6 +362,16 @@ namespace Losos
             
             shader.SetMatrix4("model", bg.GetModel());
             bg.Draw();
+
+            shader.SetMatrix4("model", player.GetModel());
+            player.Draw();
+
+            for (int i = 0; i < 3; i++)
+            {
+
+                shader.SetMatrix4("model", obstacles[i].GetModel());
+                obstacles[i].Draw();
+            }
 
             Matrix4 view = camera.GetViewMatrix();
             Matrix4 projection = camera.GetProjection();
@@ -374,8 +396,22 @@ namespace Losos
             }
             MouseState mouse = MouseState;
             KeyboardState input = KeyboardState;
+
+            for (int i = 0; i < 3; i++)
+            {
+
+                if (Math.Abs(obstacles[i].getX() - player.getX()) <= 1f)
+                {
+                    if (Math.Abs(obstacles[i].getZ() - player.getZ()) < 0.05f)
+                    {
+                        Close();
+                    }
+                }
+            }
+
             base.OnUpdateFrame(args);
             camera.Update(input, mouse, args);
+            player.Update(input, mouse, args);
             base.OnUpdateFrame(args);
 
             Console.SetCursorPosition(0, 0);
@@ -383,6 +419,9 @@ namespace Losos
             Console.WriteLine($"Yaw: {camera.yaw:F2}    ");
             Console.WriteLine($"X, Y, Z: {camera.position.X:F2}, {camera.position.Y:F2}, {camera.position.Z:F2}    ");
             Console.WriteLine($"Speed: {gameSpeed:F2}, estimated: {(float)MathHelper.Log2(gameSpeed) - 3f:F2} ");
+            Console.WriteLine($"Obstacle1 X : {obstacles[0].getX():F2}, Z: {obstacles[0].getZ():F2} ");
+            Console.WriteLine($"Obstacle2 X : {obstacles[1].getX():F2}, Z: {obstacles[1].getZ():F2} ");
+            Console.WriteLine($"Player X : {player.getX():F2}, Z: {player.getZ():F2} ");
         }
 
         protected override void OnResize(ResizeEventArgs e)

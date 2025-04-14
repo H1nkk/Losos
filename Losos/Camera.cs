@@ -81,7 +81,7 @@ namespace Losos
             }
             if (input.IsKeyDown(Keys.R) && !input.IsKeyDown(Keys.LeftShift))
             {
-                pitch = -45f;
+                pitch = -41f;
                 yaw = 270f;
                 position = defaultPosition;
             }
@@ -89,7 +89,7 @@ namespace Losos
             {
                 lastPos = new Vector2(mouse.X, mouse.Y);
                 firstTenMoves++;
-                this.pitch = -45f;
+                this.pitch = -41f;
                 this.yaw = 270f;
             }
             else

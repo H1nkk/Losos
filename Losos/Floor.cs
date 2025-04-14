@@ -37,9 +37,9 @@ namespace Losos
 
             dz += 0.01f * speed;
             Matrix4 translation = Matrix4.CreateTranslation(new Vector3(position.X , position.Y, position.Z + dz));
-            if (position.Z + dz >= 32f)
+            if (position.Z + dz >= 48f)
             {
-                position.Z = -32f;
+                position.Z = -48f;
                 dz = 0.0f;
             }
             model *= translation;

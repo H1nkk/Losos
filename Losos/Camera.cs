@@ -25,7 +25,7 @@ namespace Losos
         public Vector2 lastPos;
         Vector3 defaultPosition;
 
-        public Camera(int width, int height, Vector3 position, Vector3 target, float pitch = -45f, float yaw = 270f)
+        public Camera(int width, int height, Vector3 position, Vector3 target, float pitch = -41f, float yaw = 270f)
         {
             SCREENWIDTH = width;
             SCREENHEIGHT = height;
@@ -33,14 +33,8 @@ namespace Losos
             defaultPosition = position;
             this.pitch = pitch;
             this.yaw = yaw;
-            /*
+            UpdateVectors();
 
-            front = Vector3.Normalize(target - position);
-            
-            yaw = MathHelper.RadiansToDegrees(MathF.Atan2(front.Z, front.X));
-            pitch = MathHelper.RadiansToDegrees(MathF.Asin(front.Y));
-
-            UpdateVectors();*/
             lastPos = Vector2.Zero;
         }
 
@@ -79,7 +73,7 @@ namespace Losos
             {
                 position -= up * SPEED * (float)e.Time;
             }
-            if (input.IsKeyDown(Keys.R) && !input.IsKeyDown(Keys.LeftShift))
+            if (input.IsKeyDown(Keys.F))
             {
                 pitch = -41f;
                 yaw = 270f;
@@ -112,7 +106,7 @@ namespace Losos
         }
         public void Update(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
-            InputController(input, mouse, e);
+            // InputController(input, mouse, e);
         }
         private void UpdateVectors()
         {

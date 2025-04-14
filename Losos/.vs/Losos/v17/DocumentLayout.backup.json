@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\shader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:shader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\obstacle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:obstacle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\mesh.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:mesh.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\floor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,24 +31,8 @@
       "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:camera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\coin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:coin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\shader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:shader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\shaders\\shader.vert||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:shaders\\shader.vert||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|d:\\programming\\c#\\lososthegame\\cubicsf\\losos\\shaders\\shader.frag||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{6A4671F4-D063-4C83-AC8E-C05D14DB8770}|Losos.csproj|solutionrelative:shaders\\shader.frag||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,33 +50,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Coin.cs",
-              "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Coin.cs",
-              "RelativeDocumentMoniker": "Coin.cs",
-              "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Coin.cs",
-              "RelativeToolTip": "Coin.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAswCIAAAAbAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Obstacle.cs",
+              "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Obstacle.cs",
+              "RelativeDocumentMoniker": "Obstacle.cs",
+              "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Obstacle.cs",
+              "RelativeToolTip": "Obstacle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEUAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-13T18:34:57.68Z",
+              "WhenOpened": "2025-04-14T21:07:08.621Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "Player.cs",
+              "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Player.cs",
+              "RelativeDocumentMoniker": "Player.cs",
+              "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Player.cs",
+              "RelativeToolTip": "Player.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAwwEMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-14T20:55:38.764Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "Floor.cs",
               "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Floor.cs",
               "RelativeDocumentMoniker": "Floor.cs",
               "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Floor.cs",
               "RelativeToolTip": "Floor.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAYwCgAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-13T18:14:59.896Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Mesh.cs",
               "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Mesh.cs",
               "RelativeDocumentMoniker": "Mesh.cs",
@@ -93,39 +102,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Game.cs",
               "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Game.cs",
               "RelativeDocumentMoniker": "Game.cs",
               "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Game.cs",
               "RelativeToolTip": "Game.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAswP0AAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAAO4BAAAAAAAAAAAAAEYAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T18:23:39.051Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "Camera.cs",
               "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Camera.cs",
               "RelativeDocumentMoniker": "Camera.cs",
               "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Camera.cs",
               "RelativeToolTip": "Camera.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwCQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T20:55:25.899Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
               "Title": "Shader.cs",
               "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Shader.cs",
               "RelativeDocumentMoniker": "Shader.cs",
               "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Shader.cs",
               "RelativeToolTip": "Shader.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBkAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T18:23:38.946Z",
               "EditorCaption": ""
@@ -140,33 +149,7 @@
               "RelativeToolTip": "Shaders\\shader.vert",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-06T18:23:39.041Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "shader.frag",
-              "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Shaders\\shader.frag",
-              "RelativeDocumentMoniker": "Shaders\\shader.frag",
-              "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Shaders\\shader.frag",
-              "RelativeToolTip": "Shaders\\shader.frag",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-06T18:23:39.046Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\Programming\\c#\\lososTheGame\\CubicSF\\Losos\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T18:23:39.061Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-06T18:23:39.041Z"
             }
           ]
         },

@@ -16,7 +16,7 @@ namespace Losos
     internal class Player : Mesh
     {
         float SPEED;
-        Vector3 front = -Vector3.UnitZ;
+/*        Vector3 front = -Vector3.UnitZ;*/
         Vector3 right = Vector3.UnitX;
         public Player(string textPath, List<Vector3> v, uint[] inds, List<Vector2> texCrds, Shader sh, Vector3 position, float scale = 1, float speed = 1f) : base(textPath, v, inds, texCrds, sh, position, scale)
         {
@@ -60,11 +60,11 @@ namespace Losos
 
         public void InputController(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
-            if (input.IsKeyDown(Keys.Left))
+            if (input.IsKeyDown(Keys.Left) || input.IsKeyDown(Keys.A))
             {
                 position -= right * SPEED * (float)e.Time;
             }
-            if (input.IsKeyDown(Keys.Right))
+            if (input.IsKeyDown(Keys.Right) || input.IsKeyDown(Keys.D))
             {
                 position += right * SPEED * (float)e.Time;
             }

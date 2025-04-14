@@ -282,10 +282,18 @@ namespace Losos
         Floor floor1;
         Floor floor2;
         Player player;
-        Obstacle[] obstacles;
+        List<Obstacle> obstacles;
 
+        int obstacleCount = 10;
         float gameSpeed = 10f;
         float dGameSpeed = 0.001f;
+        bool gameOver = false;
+        float score;
+
+        private double _fps;
+        private double _frameTime;
+        private int _frameCount;
+        private double _timeCounter;
 
         public Game(int width, int height) : base(GameWindowSettings.Default, NativeWindowSettings.Default)
         {
@@ -293,44 +301,59 @@ namespace Losos
             this.height = height;
             this.width = width;
             shader = new Shader();
-            obstacles = new Obstacle[3];
+            obstacles = new List<Obstacle>();
         }
 
         protected override void OnLoad()
         {
             Random random = new Random();
+            score = 0f;
 
             string fishPath = "../../../Textures/fishyfishy.png";
-            string texturePath2 = "../../../Textures/unrealSF.png";
             string floorPath1 = "../../../Textures/sand.png";
             string floorPath2 = "../../../Textures/mirroredSand.png";
-            string texturePath4 = "../../../Textures/bluebg.png";
+            string bgPath = "../../../Textures/bluebg.png";
             string boxPath = "../../../Textures/bigBox.png";
-            
+
             shader.LoadShader();
 
-            //cube1 = new Coin(texturePath2, vertices, indices, texCoords, shader, new Vector3(0, 0, 0));
-            //fish1 = new Coin(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(1.5f, 0, 0));
             floor1 = new Floor(floorPath1, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, -48), 1.0f);
             floor2 = new Floor(floorPath2, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, 0), 1.0f);
-            bg = new Mesh(texturePath4, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 100f);
-            player = new Player(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(0f, -1f, 0.5f), 1f, 5f);
-            obstacles[0] = new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(-2f, 0f, -6f));
-            obstacles[1] = new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(2f, 0f, -10f));
-            obstacles[2] = new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(0.5f, 0f, -20f));
+            bg = new Mesh(bgPath, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 100f);
+            player = new Player(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(0f, -0.5f, 0.5f), 1f, 5f);
 
+            for (int i = 0; i < obstacleCount; i++)
+            {
+                float newX = (float)(-3.3f + random.NextDouble() * 6.6f), newZ = -14f - (float)(random.NextDouble() * 34f);
+                while (true)
+                {
+                    bool ok = true;
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (Math.Abs(obstacles[j].getZ() - newZ) < 2f)
+                            if (Math.Abs(obstacles[j].getX() - newX) < 1f)
+                                ok = false;
+                    }
+                    if (ok)
+                    {
+                        break; // new obstacle can be added
+                    }
+                    newX = (float)(-3.3f + random.NextDouble() * 6.6f);
+                    newZ = -14f - (float)(random.NextDouble() * 34f);
+                }
+                obstacles.Add(new Obstacle(boxPath, vertices, indices, texCoords, shader, new Vector3(newX, 0f, newZ)));
+            }
 
             GL.Enable(EnableCap.DepthTest);
 
             base.OnLoad();
-            camera = new Camera(width, height, new Vector3(0,1.5f,3), Vector3.Zero);
+            camera = new Camera(width, height, new Vector3(0, 3f, 4.5f), new Vector3(0,0,0));
             CursorState = CursorState.Grabbed;
         }
 
         protected override void OnUnload()
         {
-            // cube1.Unload();
-            // fish1.Unload();
+
             floor1.Unload();
             floor2.Unload();
             player.Unload();
@@ -347,12 +370,10 @@ namespace Losos
             float realSpeed = (float)MathHelper.Log2(gameSpeed) - 3f;
             floor1.setSpeed(realSpeed);
             floor2.setSpeed(realSpeed);
+            for (int i = 0; i < obstacles.Count; i++)
+                obstacles[i].setSpeed(realSpeed);
 
-            // shader.SetMatrix4("model", cube1.GetModel());
-            // cube1.Draw();
-
-            // shader.SetMatrix4("model", fish1.GetModel());
-            // fish1.Draw();
+            score += realSpeed * 0.01f;
 
             shader.SetMatrix4("model", floor1.GetModel());
             floor1.Draw();            
@@ -366,9 +387,8 @@ namespace Losos
             shader.SetMatrix4("model", player.GetModel());
             player.Draw();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < obstacles.Count; i++)
             {
-
                 shader.SetMatrix4("model", obstacles[i].GetModel());
                 obstacles[i].Draw();
             }
@@ -382,6 +402,7 @@ namespace Losos
             Context.SwapBuffers();
 
             base.OnRenderFrame(args);
+            FPS(args);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -390,22 +411,48 @@ namespace Losos
             {
                 Close();
             }
-            if (KeyboardState.IsKeyDown(Keys.R) && KeyboardState.IsKeyDown(Keys.LeftShift))
+            if (gameOver && KeyboardState.IsKeyDown(Keys.R))
             {
-                gameSpeed = 10f;
+                Restart();
             }
+
             MouseState mouse = MouseState;
             KeyboardState input = KeyboardState;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < obstacles.Count; i++)
             {
+                Random random = new Random();
 
-                if (Math.Abs(obstacles[i].getX() - player.getX()) <= 1f)
+                if (Math.Abs(obstacles[i].getX() - player.getX()) <= 0.6f)
                 {
                     if (Math.Abs(obstacles[i].getZ() - player.getZ()) < 0.05f)
                     {
-                        Close();
+                        GameOver();
                     }
+                }
+
+                if (obstacles[i].getZ() > 20f) // 30f
+                {
+                    float newX = (float)(-3.3f + random.NextDouble() * 6.6f), newZ = -14f - (float)(random.NextDouble() * 34f);
+                    while (true)
+                    {
+                        bool ok = true;
+                        for (int j = 0; j < obstacleCount; j++)
+                        {
+                            if (i == j) continue;
+                            if (Math.Abs(obstacles[j].getZ() - newZ) < 2f)
+                                if (Math.Abs(obstacles[j].getX() - newX) < 1f)
+                                    ok = false;
+                        }
+                        if (ok)
+                        {
+                            break; // new obstacle can be added
+                        }
+                        newX = (float)(-3.3f + random.NextDouble() * 6.6f);
+                        newZ = -14f - (float)(random.NextDouble() * 34f);
+                    }
+                    obstacles[i].setX(newX);
+                    obstacles[i].setZ(newZ);
                 }
             }
 
@@ -419,9 +466,10 @@ namespace Losos
             Console.WriteLine($"Yaw: {camera.yaw:F2}    ");
             Console.WriteLine($"X, Y, Z: {camera.position.X:F2}, {camera.position.Y:F2}, {camera.position.Z:F2}    ");
             Console.WriteLine($"Speed: {gameSpeed:F2}, estimated: {(float)MathHelper.Log2(gameSpeed) - 3f:F2} ");
-            Console.WriteLine($"Obstacle1 X : {obstacles[0].getX():F2}, Z: {obstacles[0].getZ():F2} ");
-            Console.WriteLine($"Obstacle2 X : {obstacles[1].getX():F2}, Z: {obstacles[1].getZ():F2} ");
+            for (int i = 0; i < obstacleCount; i++)
+                 Console.WriteLine($"Obstacle{i} X : {obstacles[i].getX():F2}, Z: {obstacles[i].getZ():F2} ");
             Console.WriteLine($"Player X : {player.getX():F2}, Z: {player.getZ():F2} ");
+            Console.WriteLine($"Score: {score:F0}    ");
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -438,6 +486,60 @@ namespace Losos
             return Shader.LoadShaderSource(filepath);
         }
 
+        private void GameOver()
+        {
+            gameOver = true;
+            gameSpeed = 8f; // 2^3 -> realspeed = 0
+            dGameSpeed = 0f;
+        }
 
+        private void Restart()
+        {
+            gameOver = false;
+            gameSpeed = 10f;
+            dGameSpeed = 0.001f;
+            score = 0f;
+
+            string boxPath = "../../../Textures/bigBox.png";
+            Random random = new Random();
+
+            for (int i = 0; i < obstacleCount; i++)
+            {
+                float newX = (float)(-3.3f + random.NextDouble() * 6.6f), newZ = -14f - (float)(random.NextDouble() * 34f);
+                while (true)
+                {
+                    bool ok = true;
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (Math.Abs(obstacles[j].getZ() - newZ) < 2f)
+                            if (Math.Abs(obstacles[j].getX() - newX) < 1f)
+                                ok = false;
+                    }
+                    if (ok)
+                    {
+                        break; // new obstacle can be added
+                    }
+                    newX = (float)(-3.3f + random.NextDouble() * 6.6f);
+                    newZ = -14f - (float)(random.NextDouble() * 34f);
+                }
+                obstacles[i].setX(newX);
+                obstacles[i].setZ(newZ);
+            }
+        }
+
+        private void FPS(FrameEventArgs e)
+        {
+            _frameTime = e.Time; // Время кадра в секундах
+            _timeCounter += _frameTime;
+            _frameCount++;
+
+            if (_timeCounter >= 1.0) // Каждую секунду
+            {
+                _fps = _frameCount / _timeCounter;
+                Title = $"Game - FPS: {_fps:0.0}"; // Выводим в заголовок окна
+                _frameCount = 0;
+                _timeCounter = 0;
+            }
+        }
     }
 }

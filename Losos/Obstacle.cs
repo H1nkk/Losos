@@ -65,6 +65,16 @@ namespace Losos
             return position.Z + dz;
         }
 
+        public void setX(float x)
+        {
+            position.X = x;
+        }
+
+        public void setZ(float z)
+        {
+            position.Z = z;
+            dz = 0;
+        }
 
     }
 }

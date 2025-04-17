@@ -20,7 +20,7 @@ namespace Losos
     {
         int width, height;
 
-        List<Vector2> texCoords = new List<Vector2>() // мб indices
+        List<Vector2> texCoords = new List<Vector2>()
         {
             new Vector2(0f, 1f),
             new Vector2(1f, 1f),
@@ -71,7 +71,8 @@ namespace Losos
             new Vector2(1.1f, 0.4f), // 10
 
             new Vector2(0.6f, 0.8f), // 11
-            new Vector2(0.6f, 0.2f)  // 12
+            new Vector2(0.6f, 0.2f), // 12
+            new Vector2(0.2f, 0.2f)  // 13
         };
         List<Vector2> bgTexCoords = new List<Vector2>() // мб indices
         {
@@ -79,6 +80,13 @@ namespace Losos
             new Vector2(1f, 1f),
             new Vector2(1f, 0f),
             new Vector2(0f, 0f),
+        };
+        List<Vector2> floorTexCoords = new List<Vector2>()
+        {
+            new Vector2(0f, 1f),
+            new Vector2(1f, 1f),
+            new Vector2(1f, 0f),
+            new Vector2(0f, 0f)
         };
 
         uint[] indices =
@@ -127,24 +135,15 @@ namespace Losos
     8, 11, 12,  8, 12, 9,
     9, 12, 13,  9, 13, 10,
     10, 13, 11, 10, 11, 8,
-
-    // Верхний плавник
-    1, 14, 15,  // левая сторона
-    5, 17, 16,  // правая сторона
-
-    // Грани верхнего плавника
-    14, 16, 17, 14, 17, 15,
-
-    // Нижний плавник
-    3, 19, 18,  // левая сторона
-    7, 20, 21,  // правая сторона
-
-    // Грани нижнего плавника
-    18, 20, 21, 18, 21, 19
         };
         uint[] bgIndices = new uint[]
         {
             // Передняя грань
+            0, 1, 2,
+            2, 3, 0,
+        };
+        uint[] floorIndices =
+        {
             0, 1, 2,
             2, 3, 0,
         };
@@ -210,60 +209,13 @@ namespace Losos
     new Vector3(1.2f,  0.3f,  0.05f), // 11
     new Vector3(1.4f,  0.0f,  0.05f), // 12
     new Vector3(1.2f, -0.3f,  0.05f), // 13
-
-    // Верхний плавник (левая сторона)
-    new Vector3(0.3f,  0.4f, -0.05f), // 14
-    new Vector3(0.5f,  0.3f, -0.05f), // 15
-
-    // Верхний плавник (правая сторона)
-    new Vector3(0.3f,  0.4f,  0.05f), // 16
-    new Vector3(0.5f,  0.3f,  0.05f), // 17
-
-    // Нижний плавник (левая сторона)
-    new Vector3(0.3f, -0.4f, -0.05f), // 18
-    new Vector3(0.5f, -0.3f, -0.05f), // 19
-
-    // Нижний плавник (правая сторона)
-    new Vector3(0.3f, -0.4f,  0.05f), // 20
-    new Vector3(0.5f, -0.3f,  0.05f), // 21
 };
         List<Vector3> floorVertices = new List<Vector3>()
         {
-            // front face (передняя грань)
-            new Vector3(-8.0f,  1.0f,  24.0f), // top-left
-            new Vector3( 8.0f,  1.0f,  24.0f), // top-right
-            new Vector3( 8.0f, -1.0f,  24.0f), // bottom-right
-            new Vector3(-8.0f, -1.0f,  24.0f), // bottom-left
-
-            // right face (правая грань)
-            new Vector3( 8.0f,  1.0f,  24.0f), // front-top
-            new Vector3( 8.0f,  1.0f, -24.0f), // back-top
-            new Vector3( 8.0f, -1.0f, -24.0f), // back-bottom
-            new Vector3( 8.0f, -1.0f,  24.0f), // front-bottom
-
-            // back face (задняя грань)
-            new Vector3( 8.0f,  1.0f, -24.0f), // top-right
-            new Vector3(-8.0f,  1.0f, -24.0f), // top-left
-            new Vector3(-8.0f, -1.0f, -24.0f), // bottom-left
-            new Vector3( 8.0f, -1.0f, -24.0f), // bottom-right
-
-            // left face (левая грань)
-            new Vector3(-8.0f,  1.0f, -24.0f), // back-top
-            new Vector3(-8.0f,  1.0f,  24.0f), // front-top
-            new Vector3(-8.0f, -1.0f,  24.0f), // front-bottom
-            new Vector3(-8.0f, -1.0f, -24.0f), // back-bottom
-
-            // top face (верхняя грань)
-            new Vector3(-8.0f,  1.0f, -24.0f), // back-left
-            new Vector3( 8.0f,  1.0f, -24.0f), // back-right
-            new Vector3( 8.0f,  1.0f,  24.0f), // front-right
-            new Vector3(-8.0f,  1.0f,  24.0f), // front-left
-
-            // bottom face (нижняя грань)
-            new Vector3(-8.0f, -1.0f,  24.0f), // front-left
-            new Vector3( 8.0f, -1.0f,  24.0f), // front-right
-            new Vector3( 8.0f, -1.0f, -24.0f), // back-right
-            new Vector3(-8.0f, -1.0f, -24.0f)  // back-left
+            new Vector3(-8.0f,  1.0f, -24.01f), // back-left
+            new Vector3( 8.0f,  1.0f, -24.01f), // back-right
+            new Vector3( 8.0f,  1.0f,  24.01f), // front-right
+            new Vector3(-8.0f,  1.0f,  24.01f), // front-left
         };
         List<Vector3> bgVertices = new List<Vector3>() {             
             // Нижняя грань (Bottom)
@@ -276,9 +228,7 @@ namespace Losos
         Shader shader;
         Camera camera;
 
-        // Mesh fish1;
         Mesh bg;
-        // Coin cube1;
         Floor floor1;
         Floor floor2;
         Player player;
@@ -290,10 +240,10 @@ namespace Losos
         bool gameOver = false;
         float score;
 
-        private double _fps;
-        private double _frameTime;
-        private int _frameCount;
-        private double _timeCounter;
+        private double fps;
+        private double frameTime;
+        private int frameCount;
+        private double timeCounter;
 
         public Game(int width, int height) : base(GameWindowSettings.Default, NativeWindowSettings.Default)
         {
@@ -306,7 +256,7 @@ namespace Losos
 
         protected override void OnLoad()
         {
-            Random random = new Random();
+            Random random = new();
             score = 0f;
 
             string fishPath = "../../../Textures/fishyfishy.png";
@@ -317,10 +267,10 @@ namespace Losos
 
             shader.LoadShader();
 
-            floor1 = new Floor(floorPath1, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, -48), 1.0f);
-            floor2 = new Floor(floorPath2, floorVertices, indices, texCoords, shader, new Vector3(0, -3f, 0), 1.0f);
+            floor1 = new Floor(floorPath1, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -3f, -48), 1.0f);
+            floor2 = new Floor(floorPath2, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -3f, 0), 1.0f);
             bg = new Mesh(bgPath, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 100f);
-            player = new Player(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(0f, -0.5f, 0.5f), 1f, 5f);
+            player = new Player(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(0f, 0f, 0.5f), 1f, 5f);
 
             for (int i = 0; i < obstacleCount; i++)
             {
@@ -402,7 +352,8 @@ namespace Losos
             Context.SwapBuffers();
 
             base.OnRenderFrame(args);
-            FPS(args);
+            if (!gameOver)
+                FPS(args);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -425,13 +376,13 @@ namespace Losos
 
                 if (Math.Abs(obstacles[i].getX() - player.getX()) <= 0.6f)
                 {
-                    if (Math.Abs(obstacles[i].getZ() - player.getZ()) < 0.05f)
+                    if (Math.Abs(obstacles[i].getZ() - player.getZ() + 0.3f) < 0.05f)
                     {
                         GameOver();
                     }
                 }
 
-                if (obstacles[i].getZ() > 20f) // 30f
+                if (obstacles[i].getZ() > 20f)
                 {
                     float newX = (float)(-3.3f + random.NextDouble() * 6.6f), newZ = -14f - (float)(random.NextDouble() * 34f);
                     while (true)
@@ -470,6 +421,9 @@ namespace Losos
                  Console.WriteLine($"Obstacle{i} X : {obstacles[i].getX():F2}, Z: {obstacles[i].getZ():F2} ");
             Console.WriteLine($"Player X : {player.getX():F2}, Z: {player.getZ():F2} ");
             Console.WriteLine($"Score: {score:F0}    ");
+
+            if (gameOver)
+                Title = "GAME OVER. PRESS \"R\" TO RESTART";
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -495,12 +449,12 @@ namespace Losos
 
         private void Restart()
         {
+            Title = "NEW GAME STARTED";
             gameOver = false;
             gameSpeed = 10f;
             dGameSpeed = 0.001f;
             score = 0f;
 
-            string boxPath = "../../../Textures/bigBox.png";
             Random random = new Random();
 
             for (int i = 0; i < obstacleCount; i++)
@@ -529,16 +483,15 @@ namespace Losos
 
         private void FPS(FrameEventArgs e)
         {
-            _frameTime = e.Time; // Время кадра в секундах
-            _timeCounter += _frameTime;
-            _frameCount++;
+            timeCounter += e.Time;
+            frameCount++;
 
-            if (_timeCounter >= 1.0) // Каждую секунду
+            if (timeCounter >= 1.0)
             {
-                _fps = _frameCount / _timeCounter;
-                Title = $"Game - FPS: {_fps:0.0}"; // Выводим в заголовок окна
-                _frameCount = 0;
-                _timeCounter = 0;
+                fps = frameCount / timeCounter;
+                Title = $"Game - FPS: {fps:0.0}";
+                frameCount = 0;
+                timeCounter = 0;
             }
         }
     }

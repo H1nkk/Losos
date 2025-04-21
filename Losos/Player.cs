@@ -110,15 +110,12 @@ namespace Losos
         {
             float deltaTime = (float)e.Time;
 
-            // Обработка прыжка
             if (isJumping && !isDead)
             {
-                // Применяем гравитацию
                 jumpVelocity += gravity * deltaTime;
                 position.Y += jumpVelocity * deltaTime;
 
-                // Проверяем, приземлились ли
-                if (position.Y <= neededY) // 0f - уровень земли
+                if (position.Y <= neededY) // neededY - уровень земли
                 {
                     position.Y = neededY;
                     isJumping = false;

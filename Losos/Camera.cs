@@ -11,16 +11,14 @@ namespace Losos
 {
     internal class Camera
     {
-        private float SPEED = 8f;
         private int SCREENWIDTH;
         private int SCREENHEIGHT;
-        private float SENSITIVITY = 100f;
         public Vector3 position;
         Vector3 up = Vector3.UnitY;
         Vector3 front = -Vector3.UnitZ;
         Vector3 right = Vector3.UnitX;
-        public float pitch; // вернуть private
-        public float yaw;// вернуть private
+        public float pitch;
+        public float yaw;
         private int firstTenMoves = 0;
         public Vector2 lastPos;
         Vector3 defaultPosition;
@@ -28,7 +26,6 @@ namespace Losos
         bool isJumping = false;
         bool isDead = false;
         public float jumpVelocity = 5f;
-        const float jumpForce = 5f; // Сила прыжка
         const float gravity = -9.8f; // Гравитация
         float neededY;
 
@@ -53,7 +50,7 @@ namespace Losos
 
         public Matrix4 GetProjection()
         {
-            return Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60f), SCREENWIDTH / SCREENHEIGHT, 0.1f, 100f);
+            return Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60f), SCREENWIDTH / SCREENHEIGHT, 0.1f, 150f);
         }
         public void InputController(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
@@ -62,74 +59,19 @@ namespace Losos
                 isJumping = true;
                 jumpVelocity = 5f;
             }
-            /*if (input.IsKeyDown(Keys.W))
-            {
-                position += front * SPEED * (float)e.Time;
-            }
-            if (input.IsKeyDown(Keys.A))
-            {
-                position -= right * SPEED * (float)e.Time;
-            }
-            if (input.IsKeyDown(Keys.S))
-            {
-                position -= front * SPEED * (float)e.Time;
-            }
-            if (input.IsKeyDown(Keys.D))
-            {
-                position += right * SPEED * (float)e.Time;
-            }
-            if (input.IsKeyDown(Keys.Space))
-            {
-                position += up * SPEED * (float)e.Time;
-            }
-            if (input.IsKeyDown(Keys.LeftShift))
-            {
-                position -= up * SPEED * (float)e.Time;
-            }
-            if (input.IsKeyDown(Keys.F))
-            {
-                pitch = -41f;
-                yaw = 270f;
-                position = defaultPosition;
-            }
-            if (firstTenMoves < 10)
-            {
-                lastPos = new Vector2(mouse.X, mouse.Y);
-                firstTenMoves++;
-                this.pitch = -41f;
-                this.yaw = 270f;
-            }
-            else
-            {
-                var deltaX = mouse.X - lastPos.X;
-                var deltaY = mouse.Y - lastPos.Y;
-                lastPos = new Vector2(mouse.X, mouse.Y);
-                yaw += deltaX * SENSITIVITY * (float)e.Time;
-                pitch -= deltaY * SENSITIVITY * (float)e.Time;
-                if (pitch > 89f)
-                {
-                    pitch = 89f;
-                }
-                if (pitch < -89f)
-                {
-                    pitch = -89f;
-                }
-            }*/
+           
             UpdateVectors();
         }
         public void Update(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
             float deltaTime = (float)e.Time;
 
-            // Обработка прыжка
             if (isJumping && !isDead)
             {
-                // Применяем гравитацию
                 jumpVelocity += gravity * deltaTime;
                 position.Y += jumpVelocity * deltaTime;
 
-                // Проверяем, приземлились ли
-                if (position.Y <= neededY) // 0f - уровень земли
+                if (position.Y <= neededY) // neededY - уровень земли
                 {
                     position.Y = neededY;
                     isJumping = false;

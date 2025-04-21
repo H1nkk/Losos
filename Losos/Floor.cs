@@ -18,12 +18,11 @@ namespace Losos
     {
         private float dz;
         private float speed;
-        private float z;
+        private float len = 48f;
 
         public Floor(string textPath, List<Vector3> v, uint[] inds, List<Vector2> texCrds, Shader sh, Vector3 position, float scale = 1.0f, float speed = 0f) : base(textPath, v, inds, texCrds, sh, position, scale)
         {
             this.speed = speed;
-            z = position.Z;
         }
 
         public Vector3 getPos()
@@ -117,5 +116,11 @@ namespace Losos
         {
             speed = nSpeed;
         }
+
+        public float getLength()
+        {
+            return len;
+        }
+
     }
 }

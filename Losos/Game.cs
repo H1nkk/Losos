@@ -284,7 +284,7 @@ namespace Losos
 
             floor1 = new Floor(floorPath1, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -1f, -48), 1.0f);
             floor2 = new Floor(floorPath2, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -2f, 0), 1.0f);
-            bg = new Mesh(bgPath, bgVertices, bgIndices, bgTexCoords, shader, new Vector3(0, -4.5f, 0), 100f);
+            bg = new Mesh(bgPath, vertices, indices, texCoords, shader, new Vector3(0, -4.5f, 0), 100f);
             player = new Player(fishPath, fishVertices, fishIndices, fishTexCoords, shader, new Vector3(0f, 0f, 0.5f), 1f, 5f);
 
             GL.Enable(EnableCap.DepthTest);
@@ -357,12 +357,15 @@ namespace Losos
             KeyboardState input = KeyboardState;
 
             base.OnUpdateFrame(args);
-            camera.Update(input, mouse, args);
-            player.Update(input, mouse, args);
+            if (!gameOver)
+            {
+                camera.Update(input, mouse, args);
+                player.Update(input, mouse, args);
+            }
             base.OnUpdateFrame(args);
 
 
-            if (floor1.getPos().Z - 24 > player.getZ() && floor1.getPos().Z - 24 < 0)
+            if (Math.Abs(floor1.getPos().Z - floor1.getLength() / 2 - 1 - player.getZ()) < 1f)
             {
                 if (Math.Abs(floor1.getPos().Y + 2 - player.getPos().Y) < 0.5)
                     GameOver();
@@ -372,28 +375,28 @@ namespace Losos
                     {
                         player.Ascend();
                         camera.Ascend();
-                        toGo = 4f;
+                        toGo = 12f;
                     }
                     ascended = true;
                 }
             }
-            if (floor2.getPos().Z - 24 > player.getZ())
+            if (Math.Abs(floor2.getPos().Z - floor1.getLength() / 2 - 1 - player.getZ()) < 1f)
             {
                 if (Math.Abs(floor2.getPos().Y + 2 - player.getPos().Y) < 0.5)
-                    GameOver();
+                     GameOver();
                 else
                 {
                     if (!ascended)
                     {
                         player.Ascend();
                         camera.Ascend();
-                        toGo = 4f;
+                        toGo = 12f;
                     }
                     ascended = true;
                 }
             }
 
-            toGo -= (float)args.Time * realSpeed;
+            toGo -= 0.01f * realSpeed;
 
             if (toGo < 0)
             {
@@ -440,10 +443,11 @@ namespace Losos
         private void Restart()
         {
             player.Revive();
+            camera.Revive();
             string floorPath1 = "../../../Textures/sand.png";
             string floorPath2 = "../../../Textures/mirroredSand.png";
-            floor1 = new Floor(floorPath1, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -2f, -48), 1.0f);
-            floor2 = new Floor(floorPath2, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -3f, 0), 1.0f);
+            floor1 = new Floor(floorPath1, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -1f, -48), 1.0f);
+            floor2 = new Floor(floorPath2, floorVertices, floorIndices, floorTexCoords, shader, new Vector3(0, -2f, 0), 1.0f);
             Title = "NEW GAME STARTED";
             gameOver = false;
             gameSpeed = 10f;

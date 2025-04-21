@@ -25,6 +25,13 @@ namespace Losos
         public Vector2 lastPos;
         Vector3 defaultPosition;
 
+        bool isJumping = false;
+        bool isDead = false;
+        public float jumpVelocity = 5f;
+        const float jumpForce = 5f; // Сила прыжка
+        const float gravity = -9.8f; // Гравитация
+        float neededY;
+
         public Camera(int width, int height, Vector3 position, Vector3 target, float pitch = -41f, float yaw = 270f)
         {
             SCREENWIDTH = width;
@@ -35,6 +42,7 @@ namespace Losos
             this.yaw = yaw;
             UpdateVectors();
 
+            neededY = defaultPosition.Y;
             lastPos = Vector2.Zero;
         }
 
@@ -49,7 +57,12 @@ namespace Losos
         }
         public void InputController(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
-            if (input.IsKeyDown(Keys.W))
+            if (input.IsKeyDown(Keys.Space) && !isJumping)
+            {
+                isJumping = true;
+                jumpVelocity = 5f;
+            }
+            /*if (input.IsKeyDown(Keys.W))
             {
                 position += front * SPEED * (float)e.Time;
             }
@@ -101,12 +114,35 @@ namespace Losos
                 {
                     pitch = -89f;
                 }
-            }
+            }*/
             UpdateVectors();
         }
         public void Update(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
-            // InputController(input, mouse, e);
+            float deltaTime = (float)e.Time;
+
+            // Обработка прыжка
+            if (isJumping && !isDead)
+            {
+                // Применяем гравитацию
+                jumpVelocity += gravity * deltaTime;
+                position.Y += jumpVelocity * deltaTime;
+
+                // Проверяем, приземлились ли
+                if (position.Y <= neededY) // 0f - уровень земли
+                {
+                    position.Y = neededY;
+                    isJumping = false;
+                }
+            }
+
+            if (isDead)
+            {
+                position.Y = (float)Math.Floor(position.Y);
+            }
+
+
+            InputController(input, mouse, e);
         }
         private void UpdateVectors()
         {
@@ -116,6 +152,18 @@ namespace Losos
             front = Vector3.Normalize(front);
             right = Vector3.Normalize(Vector3.Cross(front, Vector3.UnitY));
             up = Vector3.Normalize(Vector3.Cross(right, front));
+        }
+
+        public void Revive()
+        {
+            isDead = false;
+            position = defaultPosition;
+            neededY = defaultPosition.Y;
+        }
+
+        public void Ascend()
+        {
+            neededY += 1f;
         }
 
     }

@@ -18,13 +18,36 @@ namespace Losos
         float SPEED;
 /*        Vector3 front = -Vector3.UnitZ;*/
         Vector3 right = Vector3.UnitX;
+        Vector3 up = Vector3.UnitY;
+        float dy = 0f;
+        bool isJumping = false;
+        bool isDead = false;
+        public float jumpVelocity = 5f;
+        const float jumpForce = 5f; // Сила прыжка
+        const float gravity = -9.8f; // Гравитация
+        float neededY = 0f;
+        Vector3 dflt;
+
         public Player(string textPath, List<Vector3> v, uint[] inds, List<Vector2> texCrds, Shader sh, Vector3 position, float scale = 1, float speed = 1f) : base(textPath, v, inds, texCrds, sh, position, scale)
         {
+            dflt = position;
             this.SPEED = speed;
+        }
+
+        public float getY()
+        {
+            return position.Y + dy;
+        }
+
+        public Vector3 getPos()
+        {
+            return position;
         }
 
         public new void Draw()
         {
+
+
             GL.BindTexture(TextureTarget.Texture2D, textureID);
 
             //Transformation
@@ -68,6 +91,10 @@ namespace Losos
             {
                 position += right * SPEED * (float)e.Time;
             }
+            if (input.IsKeyDown(Keys.Space) && !isJumping) {
+                isJumping = true;
+                jumpVelocity = 5f;
+            }
             if (position.X > 3f)
             {
                 position.X = 3f;
@@ -78,9 +105,48 @@ namespace Losos
             }
         }
 
+
         public void Update(KeyboardState input, MouseState mouse, FrameEventArgs e)
         {
+            float deltaTime = (float)e.Time;
+
+            // Обработка прыжка
+            if (isJumping && !isDead)
+            {
+                // Применяем гравитацию
+                jumpVelocity += gravity * deltaTime;
+                position.Y += jumpVelocity * deltaTime;
+
+                // Проверяем, приземлились ли
+                if (position.Y <= neededY) // 0f - уровень земли
+                {
+                    position.Y = neededY;
+                    isJumping = false;
+                }
+            }
+
+            if (isDead)
+            {
+                position.Y = (float)Math.Floor(position.Y);
+            }
+
             InputController(input, mouse, e);
+        }
+
+        public void Revive()
+        {
+            isDead = false;
+            position = dflt;
+            neededY = 0;
+        }
+        public void Ascend()
+        {
+            neededY += 1f;
+        }
+
+        public bool getJumpng()
+        {
+            return isJumping;
         }
     }
 }

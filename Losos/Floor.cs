@@ -26,6 +26,11 @@ namespace Losos
             z = position.Z;
         }
 
+        public Vector3 getPos()
+        {
+            return new Vector3(position.X, position.Y, position.Z + dz); 
+        }
+
         public new void Draw() 
         {
             GL.BindTexture(TextureTarget.Texture2D, textureID);
@@ -41,6 +46,7 @@ namespace Losos
             {
                 position.Z = -48f;
                 dz = 0.0f;
+                position.Y += 2f;
             }
             model *= translation;
 
